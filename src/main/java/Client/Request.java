@@ -4,7 +4,7 @@ import Commands.Command;
 
 import java.util.Queue;
 
-public class Response {
+public class Request {
 
     private Queue<Command> commandQueue;
 

@@ -1,5 +1,6 @@
 package Commands;
 
+import ReadersExecutors.CommandException;
 import ReadersExecutors.Executor;
 import Server.ServerINFO;
 
@@ -13,7 +14,7 @@ public interface Command {
      * @return true if method complete without troubles
      * @see ReadersExecutors.Executor.ExecuteState
      */
-    boolean execute(Executor.ExecuteState state, ServerINFO server);
+    boolean execute(Executor.ExecuteState state, ServerINFO server) throws CommandException;
 
     /**
      * Validate and set arguments for command
