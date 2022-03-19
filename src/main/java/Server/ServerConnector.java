@@ -15,33 +15,32 @@ public class ServerConnector extends Connector {
 
     private ServerConnector() {}
 
-    public static void run(int port) throws IOException, ClassNotFoundException {
-        bindChannel(port);
-        while (true) {
-            ServerExecutor.executeRequest(receiveRequest());
-        }
-    }
-
-    private static void bindChannel(int port) throws IOException {
+    static void bindChannel(int port) throws IOException {
         channel = DatagramChannel.open();
         channel.bind(new InetSocketAddress(port));
     }
 
-    private static Request receiveRequest() throws IOException, ClassNotFoundException {
+    static Request receiveRequest() throws IOException, ClassNotFoundException {
         ByteBuffer size = ByteBuffer.allocate(4);
         client = channel.receive(size);
 
         int length = decodeSizeArray(size.array());
         ByteBuffer data = ByteBuffer.allocate(length);
+        // TODO: replace "assert" with something else
         assert client == channel.receive(data) : "Received data has another address";
 
         return objectFromBuffer(data.array());
     }
 
-    void sendToClient(Response response) throws IOException {
-        ByteBuffer data = ByteBuffer.wrap(objectToBuffer(response));
-        ByteBuffer size = ByteBuffer.wrap(encodeSizeArray(data.capacity()));
-        channel.send(size, client);
-        channel.send(data, client);
+    static void sendToClient(Response response) {
+        try {
+            ByteBuffer data = ByteBuffer.wrap(objectToBuffer(response));
+            ByteBuffer size = ByteBuffer.wrap(encodeSizeArray(data.capacity()));
+            channel.send(size, client);
+            channel.send(data, client);
+        } catch (IOException e) {
+            // TODO: add logging of problems with client
+            e.printStackTrace();
+        }
     }
 }

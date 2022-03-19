@@ -4,12 +4,9 @@ import Client.Request;
 import Commands.Command;
 import MovieObjects.FieldException;
 import MovieObjects.JsonMovieCodec;
-import MovieObjects.Movie;
 import ReadersExecutors.CommandException;
-import ReadersExecutors.Executor;
 
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.Queue;
 
 public class ServerExecutor {
@@ -19,23 +16,22 @@ public class ServerExecutor {
     private static final String envName = "MovieFile";
     private static ServerINFO serverINFO;
 
-    public static void initialize() throws FieldException, IOException {
+    static void initialize() throws FieldException, IOException {
         serverINFO = new ServerINFO();
         serverINFO.setCollectionFilename(System.getenv(envName));
         if (serverINFO.getCollectionFilename() == null) {
-            throw new NullPointerException("\u001B[31m" + "ERROR: environmental variable with name \"MovieFile\" doesn't exists" + "\u001B[0m");
+            // TODO: chose better exception class
+            throw new IOException("ERROR: environmental variable with name \"MovieFile\" doesn't exists");
         }
         serverINFO.setCollection(JsonMovieCodec.readFromFile(serverINFO.getCollectionFilename()));
     }
 
     private static void validateCommands(Queue<Command> commandQueue) throws CommandException {
-        ServerINFO copiedServerINFO = new ServerINFO();
-        copiedServerINFO.setCollection((Hashtable<Integer, Movie>) serverINFO.getCollection().clone());
-        copiedServerINFO.setCollectionFilename(serverINFO.getCollectionFilename());
+        ServerINFO copiedServerINFO = serverINFO.clone();
 
         for (Command command : commandQueue) {
             try {
-                command.execute(Executor.ExecuteState.VALIDATE, copiedServerINFO);
+                command.execute(ExecuteState.VALIDATE, copiedServerINFO);
             } catch (CommandException e) {
                 throw new CommandException("Error in validation: " + e.getMessage());
             }
@@ -46,12 +42,31 @@ public class ServerExecutor {
         if (commandQueue.size() > 1) {
             validateCommands(commandQueue);
         }
-        //executing
+        for (Command command : commandQueue) {
+            command.execute(ExecuteState.EXECUTE, serverINFO);
+        }
     }
 
-    public static void executeRequest(Request request) throws CommandException {
+    static void executeRequest(Request request) {
         ResponseBuilder.createNewResponse();
-        executeCommands(request.getCommandQueue());
+        try {
+            executeCommands(request.getCommandQueue());
+        } catch (CommandException e) {
+            ResponseBuilder.createNewResponse(e.getMessage());
+        }
     }
 
+    /**
+     * Enum with two main states of executing command
+     */
+    public enum ExecuteState {
+        /**
+         * When command do what it should do (with logging)
+         */
+        EXECUTE,
+        /**
+         * When command is validating, for example, in script (without logging)
+         */
+        VALIDATE
+    }
 }

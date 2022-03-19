@@ -2,9 +2,9 @@ package Server;
 
 public class Response {
 
-    private StringBuilder message;
+    private StringBuilder message = new StringBuilder();
 
-    public void addMessage(String message) {
+    void addMessage(String message) {
         if (this.message == null) {
             this.message = (new StringBuilder()).append(message);
         } else {

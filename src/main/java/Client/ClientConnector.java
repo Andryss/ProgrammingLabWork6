@@ -1,7 +1,6 @@
 package Client;
 
 import Server.Response;
-import Server.ResponseBuilder;
 
 import java.io.*;
 import java.net.*;
@@ -23,14 +22,14 @@ public class ClientConnector extends Connector {
         try {
             sendRequest(request);
         } catch (IOException e) {
-            throw new IOException("Can't send response to server: " + e.getMessage(), e);
+            throw new IOException("Can't send request to server: " + e.getMessage(), e);
         }
         try {
             return acceptResponse();
         } catch (IOException e) {
-            throw new IOException("Can't receive request from server: " + e.getMessage(), e);
+            throw new IOException("Can't receive response from server: " + e.getMessage(), e);
         } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundException("Can't found Request class: " + e.getMessage(), e);
+            throw new ClassNotFoundException("Can't find Response class: " + e.getMessage(), e);
         }
     }
 

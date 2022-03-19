@@ -4,7 +4,7 @@ import MovieObjects.Movie;
 
 import java.util.Hashtable;
 
-public class ServerINFO {
+public class ServerINFO implements Cloneable {
 
     private Hashtable<Integer,Movie> collection;
 
@@ -24,5 +24,12 @@ public class ServerINFO {
 
     public String getCollectionFilename() {
         return collectionFilename;
+    }
+
+    public ServerINFO clone() {
+        ServerINFO clone = new ServerINFO();
+        clone.setCollection((Hashtable<Integer, Movie>) collection.clone());
+        clone.setCollectionFilename(collectionFilename);
+        return clone;
     }
 }

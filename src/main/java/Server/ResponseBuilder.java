@@ -5,15 +5,19 @@ public class ResponseBuilder {
 
     private ResponseBuilder() {}
 
-    public static void createNewResponse() {
+    static void createNewResponse() {
         response = new Response();
+    }
+
+    static void createNewResponse(String line) {
+        createNewResponse(); add(line);
     }
 
     public static void add(String line) {
         response.addMessage(line);
     }
 
-    public static Response getResponse() {
+    static Response getResponse() {
         return response;
     }
 }
