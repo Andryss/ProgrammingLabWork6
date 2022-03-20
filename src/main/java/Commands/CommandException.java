@@ -1,4 +1,4 @@
-package ReadersExecutors;
+package Commands;
 
 /**
  * Class of all command exceptions with name of command and reason

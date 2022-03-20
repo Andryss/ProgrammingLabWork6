@@ -6,8 +6,14 @@ import java.io.IOException;
 
 public class ServerManager {
 
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(ServerExecutor::saveCollection));
+    }
+
     public static void run(int port) throws IOException, FieldException {
+        System.out.println("Initializations start");
         initializations(port);
+        System.out.println("Initializations completed");
 
         while (true) {
             try {
@@ -21,7 +27,7 @@ public class ServerManager {
     }
 
     private static void initializations(int port) throws IOException, FieldException {
-        ServerConnector.bindChannel(port);
+        ServerConnector.initialize(port);
         ServerExecutor.initialize();
     }
 

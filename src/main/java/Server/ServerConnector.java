@@ -8,39 +8,71 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ServerConnector extends Connector {
     private static DatagramChannel channel;
+    private static Selector selector;
     private static SocketAddress client;
+    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(12000);
 
     private ServerConnector() {}
 
-    static void bindChannel(int port) throws IOException {
+    static void initialize(int port) throws IOException {
+        bindChannel(port);
+    }
+
+    private static void bindChannel(int port) throws IOException {
         channel = DatagramChannel.open();
+        channel.configureBlocking(false);
+        selector = Selector.open();
+        channel.register(selector, SelectionKey.OP_READ);
         channel.bind(new InetSocketAddress(port));
     }
 
     static Request receiveRequest() throws IOException, ClassNotFoundException {
-        ByteBuffer size = ByteBuffer.allocate(4);
-        client = channel.receive(size);
+        System.out.println("Ready for receiving");
 
-        int length = decodeSizeArray(size.array());
-        ByteBuffer data = ByteBuffer.allocate(length);
-        // TODO: replace "assert" with something else
-        assert client == channel.receive(data) : "Received data has another address";
+        infinity:
+        while (true) {
+            selector.select();
+            Set<SelectionKey> keys = selector.selectedKeys();
+            for (Iterator<SelectionKey> keyIterator = keys.iterator(); keyIterator.hasNext(); keyIterator.remove()) {
+                SelectionKey key = keyIterator.next();
+                if (key.isValid()) {
+                    if (key.isReadable()) {
+                        break infinity;
+                    }
+                }
+            }
+        }
 
-        return objectFromBuffer(data.array());
+        client = channel.receive(dataBuffer);
+
+        Request request = objectFromBuffer(dataBuffer.array());
+        System.out.println(request.getCommandQueue());
+
+        dataBuffer.clear();
+
+        return request;
     }
 
     static void sendToClient(Response response) {
+        System.out.println("Sending to client starts");
+
         try {
-            ByteBuffer data = ByteBuffer.wrap(objectToBuffer(response));
-            ByteBuffer size = ByteBuffer.wrap(encodeSizeArray(data.capacity()));
-            channel.send(size, client);
-            channel.send(data, client);
+            dataBuffer.put(objectToBuffer(response));
+            dataBuffer.flip();
+            channel.send(dataBuffer, client);
+            dataBuffer.clear();
         } catch (IOException e) {
             // TODO: add logging of problems with client
             e.printStackTrace();
         }
+
+        System.out.println("Sending to client completed");
     }
 }

@@ -1,8 +1,10 @@
 package Server;
 
-public class Response {
+import java.io.Serializable;
 
-    private StringBuilder message = new StringBuilder();
+public class Response implements Serializable {
+
+    private StringBuilder message;
 
     void addMessage(String message) {
         if (this.message == null) {
@@ -15,5 +17,4 @@ public class Response {
     public String getMessage() {
         return message.toString();
     }
-
 }

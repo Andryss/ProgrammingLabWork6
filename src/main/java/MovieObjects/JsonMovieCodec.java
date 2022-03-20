@@ -5,6 +5,7 @@ import javax.json.stream.JsonParser;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.Hashtable;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -26,8 +27,14 @@ public class JsonMovieCodec {
         if (!movieFile.canRead()) {
             throw new IOException("file " + fileName + " can't be read");
         }
+
         Scanner scanner = new Scanner(movieFile);
-        String hashTableString = scanner.nextLine();
+        String hashTableString;
+        try {
+            hashTableString = scanner.nextLine();
+        } catch (NoSuchElementException e) {
+            return new Hashtable<>();
+        }
         scanner.close();
 
         Hashtable<Integer, Movie> resultHashtable = new Hashtable<>();

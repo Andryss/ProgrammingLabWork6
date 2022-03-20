@@ -1,21 +1,39 @@
 package Client;
 
+import Commands.HelpCommand;
 import Server.Response;
 
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 
 public class ClientConnector extends Connector {
     private static DatagramSocket socket;
     private static InetAddress serverAddress;
     private static int serverPort;
+    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(12000);
 
     private ClientConnector() {}
 
-    static void setConnection(String serverName, int port) throws SocketException, UnknownHostException {
+    static void initialize(String serverName, int port) throws IOException, ClassNotFoundException {
+        setConnection(serverName, port);
+        checkConnection();
+    }
+
+    private static void setConnection(String serverName, int port) throws SocketException, UnknownHostException {
         socket = new DatagramSocket();
+        socket.setSoTimeout(5_000);
         serverAddress = InetAddress.getByName(serverName);
         serverPort = port;
+    }
+
+    private static void checkConnection() throws IOException, ClassNotFoundException {
+        RequestBuilder.createNewRequest(new HelpCommand("help"));
+        try {
+            sendToServer(RequestBuilder.getRequest()).getMessage();
+        } catch (SocketTimeoutException e) {
+            throw new IOException("Server is not responding, try later or choose another server :(");
+        }
     }
 
     static Response sendToServer(Request request) throws IOException, ClassNotFoundException {
@@ -26,18 +44,17 @@ public class ClientConnector extends Connector {
         }
         try {
             return acceptResponse();
+        } catch (SocketTimeoutException e) {
+            throw e;
         } catch (IOException e) {
             throw new IOException("Can't receive response from server: " + e.getMessage(), e);
         } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundException("Can't find Response class: " + e.getMessage(), e);
+            throw new ClassNotFoundException("Can't find Response class in response from server: " + e.getMessage(), e);
         }
     }
 
     private static void sendRequest(Request request) throws IOException {
-        byte[] buf = objectToBuffer(request);
-        byte[] size = encodeSizeArray(buf.length);
-        sendPacket(size);
-        sendPacket(buf);
+        sendPacket(objectToBuffer(request));
     }
 
     private static void sendPacket(byte[] buf) throws IOException {
@@ -46,18 +63,14 @@ public class ClientConnector extends Connector {
     }
 
     private static Response acceptResponse() throws IOException, ClassNotFoundException {
-        byte[] size = new byte[4];
-        receivePacket(size);
-
-        int length = decodeSizeArray(size);
-        byte[] data = new byte[length];
-        receivePacket(data);
-
-        return objectFromBuffer(data);
+        receivePacket(dataBuffer.array());
+        Response response = objectFromBuffer(dataBuffer.array());
+        dataBuffer.clear();
+        return response;
     }
 
     private static void receivePacket(byte[] buf) throws IOException {
-        DatagramPacket packetWithData = new DatagramPacket(buf, buf.length, serverAddress, serverPort);
+        DatagramPacket packetWithData = new DatagramPacket(buf, buf.length);
         socket.receive(packetWithData);
     }
 }

@@ -1,4 +1,4 @@
-package ReadersExecutors;
+package Commands;
 
 /**
  * Exception, when this command is unexpected

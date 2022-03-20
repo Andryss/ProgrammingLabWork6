@@ -1,7 +1,5 @@
 package Commands;
 
-import ReadersExecutors.CommandException;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,13 +1,15 @@
 package Commands;
 
-import ReadersExecutors.CommandException;
+import Client.RequestBuilder;
 import Server.ServerExecutor;
 import Server.ServerINFO;
+
+import java.io.Serializable;
 
 /**
  * interface Command represents all required command methods
  */
-public interface Command {
+public interface Command extends Serializable {
     /**
      * Makes command executing
      * @param state tells method "to validate" or "to execute"
@@ -22,4 +24,8 @@ public interface Command {
      * @throws BadArgumentsException if arguments are incorrect
      */
     void setArgs(String... args) throws BadArgumentsException;
+
+    default void buildRequest() {
+        RequestBuilder.add(this);
+    }
 }

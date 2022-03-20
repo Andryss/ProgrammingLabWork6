@@ -4,7 +4,7 @@ import Client.Request;
 import Commands.Command;
 import MovieObjects.FieldException;
 import MovieObjects.JsonMovieCodec;
-import ReadersExecutors.CommandException;
+import Commands.CommandException;
 
 import java.io.IOException;
 import java.util.Queue;
@@ -20,7 +20,7 @@ public class ServerExecutor {
         serverINFO = new ServerINFO();
         serverINFO.setCollectionFilename(System.getenv(envName));
         if (serverINFO.getCollectionFilename() == null) {
-            // TODO: chose better exception class
+            // TODO: choose better exception class
             throw new IOException("ERROR: environmental variable with name \"MovieFile\" doesn't exists");
         }
         serverINFO.setCollection(JsonMovieCodec.readFromFile(serverINFO.getCollectionFilename()));
@@ -43,16 +43,30 @@ public class ServerExecutor {
             validateCommands(commandQueue);
         }
         for (Command command : commandQueue) {
+            // TODO: add logging in Response
             command.execute(ExecuteState.EXECUTE, serverINFO);
         }
     }
 
     static void executeRequest(Request request) {
+        System.out.println("Request starts executing");
+
         ResponseBuilder.createNewResponse();
         try {
             executeCommands(request.getCommandQueue());
         } catch (CommandException e) {
             ResponseBuilder.createNewResponse(e.getMessage());
+        }
+
+        System.out.println("Request executed");
+    }
+
+    static void saveCollection() {
+        try {
+            JsonMovieCodec.writeToFile(serverINFO.getCollectionFilename(),serverINFO.getCollection());
+        } catch (IOException e) {
+            System.out.println("Can't save collection: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
