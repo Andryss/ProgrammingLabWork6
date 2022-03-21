@@ -12,19 +12,23 @@ public class ClientController {
     static void initialize() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("\u001B[36m" + "THANK YOU for choosing our app to work with collections.\n" +
                 "Developers are searching for the best realizations. Have a nice day :)" + "\u001B[0m")));
-        print("\u001B[36m" + "Hi! This is a simple client-server program for working with collection.");
-        print("I'm waiting for your commands (type \"help\" for list of available commands)." + "\u001B[0m");
+        println("\u001B[36m" + "Hi! This is a simple client-server program for working with collection.");
+        println("I'm waiting for your commands (type \"help\" for list of available commands)." + "\u001B[0m");
     }
 
-    static String readLine() {
+    public static String readLine() {
         return reader.nextLine();
     }
 
-    static void print(String line) {
+    public static void println(String line) {
         writer.println(line);
     }
 
-    static void printErr(String line) {
+    public static void print(String line) {
+        writer.print(line);
+    }
+
+    public static void printlnErr(String line) {
         errWriter.println(line);
     }
 }

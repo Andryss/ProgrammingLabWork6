@@ -31,10 +31,11 @@ public class ServerConnector extends Connector {
         selector = Selector.open();
         channel.register(selector, SelectionKey.OP_READ);
         channel.bind(new InetSocketAddress(port));
+
     }
 
     static Request receiveRequest() throws IOException, ClassNotFoundException {
-        System.out.println("Ready for receiving");
+        ServerController.println("Ready for receiving");
 
         infinity:
         while (true) {
@@ -53,7 +54,7 @@ public class ServerConnector extends Connector {
         client = channel.receive(dataBuffer);
 
         Request request = objectFromBuffer(dataBuffer.array());
-        System.out.println(request.getCommandQueue());
+        ServerController.println(request.getCommandQueue().toString());
 
         dataBuffer.clear();
 
@@ -61,7 +62,7 @@ public class ServerConnector extends Connector {
     }
 
     static void sendToClient(Response response) {
-        System.out.println("Sending to client starts");
+        ServerController.println("Sending to client starts");
 
         try {
             dataBuffer.put(objectToBuffer(response));
@@ -73,6 +74,10 @@ public class ServerConnector extends Connector {
             e.printStackTrace();
         }
 
-        System.out.println("Sending to client completed");
+        ServerController.println("Sending to client completed");
+    }
+
+    public static DatagramChannel getChannel() {
+        return channel;
     }
 }

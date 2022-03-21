@@ -1,11 +1,10 @@
 package Client;
 
-import Commands.Command;
-import Commands.CommandException;
-import Commands.HelpCommand;
-import Commands.UndefinedCommandException;
+import Commands.*;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class ClientExecutor {
@@ -13,6 +12,10 @@ public class ClientExecutor {
      * Map with command, where key is a name of command and value is a class of command
      */
     private static final Map<String, Command> commandMap = new HashMap<>();
+    /**
+     * List with all successful executed commands
+     */
+    private static final List<String> history = new LinkedList<>();
 
     static void initialize() {
         fillCommandMap();
@@ -21,6 +24,21 @@ public class ClientExecutor {
     private static void fillCommandMap() {
         // TODO: add commands in command map
         commandMap.put("help", new HelpCommand("help"));
+        //info
+        //show
+        //insert null {element}
+        //update id {element}
+        //remove_key null
+        //clear
+        //save --- FORBIDDEN!
+        //execute_script file_name
+        commandMap.put("exit", new ExitCommand("exit"));
+        commandMap.put("history", new HistoryCommand("history", history));
+        //replace_if_greater null {element}
+        //remove_lower_key null
+        //group_counting_by_length
+        //count_less_than_length length
+        //filter_by_mpaa_rating mpaaRating
     }
 
     static void parseCommand(String inputLine) throws CommandException {
@@ -41,6 +59,7 @@ public class ClientExecutor {
             throw new UndefinedCommandException(commandName);
         }
         command.setArgs(args);
+        history.add(commandName);
         RequestBuilder.createNewRequest(commandName);
         command.buildRequest();
     }

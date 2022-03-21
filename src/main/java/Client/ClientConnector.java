@@ -30,7 +30,7 @@ public class ClientConnector extends Connector {
     private static void checkConnection() throws IOException, ClassNotFoundException {
         RequestBuilder.createNewRequest(new HelpCommand("help"));
         try {
-            sendToServer(RequestBuilder.getRequest()).getMessage();
+            sendToServer(RequestBuilder.getRequest());
         } catch (SocketTimeoutException e) {
             throw new IOException("Server is not responding, try later or choose another server :(");
         }
@@ -71,6 +71,10 @@ public class ClientConnector extends Connector {
 
     private static void receivePacket(byte[] buf) throws IOException {
         DatagramPacket packetWithData = new DatagramPacket(buf, buf.length);
-        socket.receive(packetWithData);
+        try {
+            socket.receive(packetWithData);
+        } catch (SocketTimeoutException e) {
+            throw new SocketTimeoutException("Time to execute command run out. Server connection lost");
+        }
     }
 }

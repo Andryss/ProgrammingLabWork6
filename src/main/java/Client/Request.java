@@ -8,7 +8,7 @@ import java.util.Queue;
 
 public class Request implements Serializable {
 
-    private String commandName;
+    private final String commandName;
 
     private final Queue<Command> commandQueue = new LinkedList<>();
 

@@ -42,6 +42,7 @@ public class ServerExecutor {
         if (commandQueue.size() > 1) {
             validateCommands(commandQueue);
         }
+
         for (Command command : commandQueue) {
             // TODO: add logging in Response
             command.execute(ExecuteState.EXECUTE, serverINFO);
@@ -49,23 +50,25 @@ public class ServerExecutor {
     }
 
     static void executeRequest(Request request) {
-        System.out.println("Request starts executing");
+        ServerController.println("Request starts executing");
 
         ResponseBuilder.createNewResponse();
         try {
+            ResponseBuilder.add("\u001B[34m" + "START: command \"" + request.getCommandName() + "\" start executing" + "\u001B[0m");
             executeCommands(request.getCommandQueue());
+            ResponseBuilder.add("\u001B[32m" + "SUCCESS: command \"" + request.getCommandName() + "\" successfully completed" + "\u001B[0m");
         } catch (CommandException e) {
             ResponseBuilder.createNewResponse(e.getMessage());
         }
 
-        System.out.println("Request executed");
+        ServerController.println("Request executed");
     }
 
     static void saveCollection() {
         try {
             JsonMovieCodec.writeToFile(serverINFO.getCollectionFilename(),serverINFO.getCollection());
         } catch (IOException e) {
-            System.out.println("Can't save collection: " + e.getMessage());
+            ServerController.println("Can't save collection: " + e.getMessage());
             e.printStackTrace();
         }
     }

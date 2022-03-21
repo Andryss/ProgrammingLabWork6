@@ -11,11 +11,11 @@ public class ServerMain {
         try {
             ServerManager.run(port);
         } catch (FieldException e) {
-            System.out.println("Problems with Movie File: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Problems with Movie File: " + e.getMessage());
+            //e.printStackTrace();
         } catch (IOException e) {
-            // TODO: replace printStackTrace with something better
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            //e.printStackTrace();
         }
     }
 

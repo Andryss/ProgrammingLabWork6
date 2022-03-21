@@ -12,19 +12,16 @@ public class ClientManager {
         while (true) {
             try {
                 ClientExecutor.parseCommand(ClientController.readLine());
-                ClientController.print(ClientConnector.sendToServer(RequestBuilder.getRequest()).getMessage());
-            } catch (IOException | ClassNotFoundException e) {
-                // TODO: add error logging
-                e.printStackTrace();
-            } catch (CommandException e) {
-                ClientController.printErr(e.getMessage());
+                ClientController.println(ClientConnector.sendToServer(RequestBuilder.getRequest()).getMessage());
+            } catch (IOException | ClassNotFoundException | CommandException e) {
+                ClientController.printlnErr(e.getMessage());
             }
         }
     }
 
     private static void initializations(String serverName, int port) throws IOException, ClassNotFoundException {
         ClientConnector.initialize(serverName, port);
-        ClientController.print("Connection with server was successful");
+        ClientController.println("Connection with server was successful");
         ClientExecutor.initialize();
         ClientController.initialize();
     }

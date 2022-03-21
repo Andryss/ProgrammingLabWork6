@@ -3,6 +3,7 @@ package Server;
 import MovieObjects.FieldException;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class ServerManager {
 
@@ -11,9 +12,10 @@ public class ServerManager {
     }
 
     public static void run(int port) throws IOException, FieldException {
-        System.out.println("Initializations start");
+        ServerController.println("Initializations start");
         initializations(port);
-        System.out.println("Initializations completed");
+        ServerController.println("Initializations completed");
+        ServerController.println("Server started at: " + InetAddress.getLocalHost());
 
         while (true) {
             try {
@@ -21,6 +23,7 @@ public class ServerManager {
                 ServerConnector.sendToClient(ResponseBuilder.getResponse());
             } catch (ClassNotFoundException | IOException e) {
                 // TODO: add logging of incorrect read class
+                ServerController.println(e.getMessage());
                 e.printStackTrace();
             }
         }
