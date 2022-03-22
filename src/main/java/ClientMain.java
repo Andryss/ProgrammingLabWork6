@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.NoSuchElementException;
 
 public class ClientMain {
 
@@ -21,6 +22,9 @@ public class ClientMain {
                 // ignore
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println(e.getMessage());
+                break;
+            } catch (NoSuchElementException e) {
+                System.err.println("Incorrect input (EOF). Bye!");
                 break;
             }
         }

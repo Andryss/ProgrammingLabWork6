@@ -31,4 +31,8 @@ public class ClientController {
     public static void printlnErr(String line) {
         errWriter.println(line);
     }
+
+    public static Scanner getReader() {
+        return reader;
+    }
 }

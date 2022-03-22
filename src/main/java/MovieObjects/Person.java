@@ -1,5 +1,6 @@
 package MovieObjects;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,7 +13,7 @@ import java.util.Objects;
  * Part of the Movie class
  * @see Movie
  */
-public class Person {
+public class Person implements Serializable {
     /**
      * Name of screenwriter (can't be null, String can't be empty)
      */

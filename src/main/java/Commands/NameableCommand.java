@@ -21,7 +21,7 @@ public abstract class NameableCommand implements Command {
         this.commandName = commandName;
     }
 
-    public void print(String line) {
+    public void println(String line) {
         ResponseBuilder.add(line);
     }
 

@@ -1,18 +1,14 @@
 package Commands;
 
+
 import Server.ResponseBuilder;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
-import java.util.List;
+public class ShowCommand extends NameableCommand {
 
-public class HistoryCommand extends NameableCommand {
-
-    private final List<String> history;
-
-    public HistoryCommand(String commandName, List<String> history) {
+    public ShowCommand(String commandName) {
         super(commandName);
-        this.history = history;
     }
 
     @Override
@@ -20,8 +16,11 @@ public class HistoryCommand extends NameableCommand {
         if (state == ServerExecutor.ExecuteState.VALIDATE) {
             return true;
         }
-        for (int i = Math.max(0, history.size() - 13); i < history.size(); i++) {
-            println(history.get(i));
+        ResponseBuilder.add("Collection contains:");
+        if (server.getCollection().size() == 0) {
+            println("*nothing*");
+        } else {
+            server.getCollection().entrySet().stream().forEach(entry -> println(entry.getKey() + " - " + entry.getValue()));
         }
         return true;
     }

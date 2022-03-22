@@ -1,11 +1,9 @@
 package Client;
 
 import Commands.*;
+import com.azul.crs.client.Client;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ClientExecutor {
     /**
@@ -24,21 +22,21 @@ public class ClientExecutor {
     private static void fillCommandMap() {
         // TODO: add commands in command map
         commandMap.put("help", new HelpCommand("help"));
-        //info
-        //show
-        //insert null {element}
+        commandMap.put("info", new InfoCommand("info"));
+        commandMap.put("show", new ShowCommand("show"));
+        commandMap.put("insert", new InsertCommand("insert", ClientController.getReader()));
         //update id {element}
-        //remove_key null
-        //clear
+        commandMap.put("remove_key", new RemoveKeyCommand("remove_key"));
+        commandMap.put("clear", new ClearCommand("clear"));
         //save --- FORBIDDEN!
         //execute_script file_name
         commandMap.put("exit", new ExitCommand("exit"));
         commandMap.put("history", new HistoryCommand("history", history));
         //replace_if_greater null {element}
-        //remove_lower_key null
-        //group_counting_by_length
-        //count_less_than_length length
-        //filter_by_mpaa_rating mpaaRating
+        commandMap.put("remove_lower_key", new RemoveKeyCommand("remove_key_command"));
+        commandMap.put("group_counting_by_length", new GroupCountingByLengthCommand("group_counting_by_length"));
+        commandMap.put("count_less_than_length", new CountLessThenLengthCommand("count_less_than_length"));
+        commandMap.put("filter_by_mpaa_rating", new FilterByMpaaRatingCommand("filter_by_mpaa_rating"));
     }
 
     static void parseCommand(String inputLine) throws CommandException {
@@ -58,7 +56,11 @@ public class ClientExecutor {
         if (command == null) {
             throw new UndefinedCommandException(commandName);
         }
-        command.setArgs(args);
+        try {
+            command.setArgs(args);
+        } catch (NoSuchElementException e) {
+            ClientController.printlnErr("Invalid input: \"EOF\"");
+        }
         history.add(commandName);
         RequestBuilder.createNewRequest(commandName);
         command.buildRequest();

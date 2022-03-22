@@ -1,5 +1,6 @@
 package MovieObjects;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import java.util.Objects;
  * @see FieldSetter
  * @see Commands.ElementCommand
  */
-public class Movie implements Comparable<Movie>{
+public class Movie implements Comparable<Movie>, Serializable {
     /**
      * Identical number (must be more than 0 and unique, generates automatically)
      */

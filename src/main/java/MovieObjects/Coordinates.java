@@ -1,12 +1,13 @@
 package MovieObjects;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Part of Movie object (Movie with Coordinates? Why now?)
  * @see Movie
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     /**
      * X coordinate
      */
