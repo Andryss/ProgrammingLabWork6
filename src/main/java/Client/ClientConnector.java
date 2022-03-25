@@ -11,19 +11,19 @@ public class ClientConnector extends Connector {
     private static DatagramSocket socket;
     private static InetAddress serverAddress;
     private static int serverPort;
-    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(12000);
+    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(65507);
 
     private ClientConnector() {}
 
-    static void initialize(String serverName, int port) throws IOException, ClassNotFoundException {
-        setConnection(serverName, port);
+    static void initialize(InetAddress serverAddress, int port) throws IOException, ClassNotFoundException {
+        setConnection(serverAddress, port);
         checkConnection();
     }
 
-    private static void setConnection(String serverName, int port) throws SocketException, UnknownHostException {
+    private static void setConnection(InetAddress serverAddress, int port) throws SocketException {
         socket = new DatagramSocket();
         socket.setSoTimeout(5_000);
-        serverAddress = InetAddress.getByName(serverName);
+        ClientConnector.serverAddress = serverAddress;
         serverPort = port;
     }
 

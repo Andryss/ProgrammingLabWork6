@@ -4,10 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Part of the Movie class
@@ -75,7 +72,7 @@ public class Person implements Serializable {
             return;
         }
         try {
-            this.hairColor = Color.valueOf(hairColor);
+            this.hairColor = Color.valueOf(hairColor.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             throw new FieldException(hairColor, "Value must be one of: " + Arrays.toString(Color.values()));
         }

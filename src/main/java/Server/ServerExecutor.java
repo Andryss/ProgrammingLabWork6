@@ -20,7 +20,6 @@ public class ServerExecutor {
         serverINFO = new ServerINFO();
         serverINFO.setCollectionFilename(System.getenv(envName));
         if (serverINFO.getCollectionFilename() == null) {
-            // TODO: choose better exception class
             throw new IOException("ERROR: environmental variable with name \"MovieFile\" doesn't exists");
         }
         serverINFO.setCollection(JsonMovieCodec.readFromFile(serverINFO.getCollectionFilename()));
@@ -33,7 +32,7 @@ public class ServerExecutor {
             try {
                 command.execute(ExecuteState.VALIDATE, copiedServerINFO);
             } catch (CommandException e) {
-                throw new CommandException("Error in validation: " + e.getMessage());
+                throw new CommandException(e.getCommand(), "Error in validation: " + e.getMessage());
             }
         }
     }
@@ -44,13 +43,12 @@ public class ServerExecutor {
         }
 
         for (Command command : commandQueue) {
-            // TODO: add logging in Response
             command.execute(ExecuteState.EXECUTE, serverINFO);
         }
     }
 
     static void executeRequest(Request request) {
-        ServerController.println("Request starts executing");
+        ServerController.info("Request starts executing");
 
         ResponseBuilder.createNewResponse();
         try {
@@ -58,18 +56,18 @@ public class ServerExecutor {
             executeCommands(request.getCommandQueue());
             ResponseBuilder.add("\u001B[32m" + "SUCCESS: command \"" + request.getCommandName() + "\" successfully completed" + "\u001B[0m");
         } catch (CommandException e) {
-            ResponseBuilder.createNewResponse(e.getMessage());
+            ResponseBuilder.createNewResponse("\u001B[31m" + e.getMessage() + "\u001B[0m");
         }
 
-        ServerController.println("Request executed");
+        ServerController.info("Request executed");
     }
 
     static void saveCollection() {
         try {
             JsonMovieCodec.writeToFile(serverINFO.getCollectionFilename(),serverINFO.getCollection());
-        } catch (IOException e) {
-            ServerController.println("Can't save collection: " + e.getMessage());
-            e.printStackTrace();
+            ServerController.info("Collection saved");
+        } catch (Throwable e) {
+            ServerController.error("Can't save collection",e);
         }
     }
 

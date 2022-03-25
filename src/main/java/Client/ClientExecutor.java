@@ -1,7 +1,6 @@
 package Client;
 
 import Commands.*;
-import com.azul.crs.client.Client;
 
 import java.util.*;
 
@@ -9,7 +8,7 @@ public class ClientExecutor {
     /**
      * Map with command, where key is a name of command and value is a class of command
      */
-    private static final Map<String, Command> commandMap = new HashMap<>();
+    private static final HashMap<String, Command> commandMap = new HashMap<>();
     /**
      * List with all successful executed commands
      */
@@ -20,19 +19,18 @@ public class ClientExecutor {
     }
 
     private static void fillCommandMap() {
-        // TODO: add commands in command map
         commandMap.put("help", new HelpCommand("help"));
         commandMap.put("info", new InfoCommand("info"));
         commandMap.put("show", new ShowCommand("show"));
         commandMap.put("insert", new InsertCommand("insert", ClientController.getReader()));
-        //update id {element}
+        commandMap.put("update", new UpdateCommand("update", ClientController.getReader()));
         commandMap.put("remove_key", new RemoveKeyCommand("remove_key"));
         commandMap.put("clear", new ClearCommand("clear"));
         //save --- FORBIDDEN!
-        //execute_script file_name
+        commandMap.put("execute_script", new ExecuteScriptCommand("execute_script", null));
         commandMap.put("exit", new ExitCommand("exit"));
         commandMap.put("history", new HistoryCommand("history", history));
-        //replace_if_greater null {element}
+        commandMap.put("replace_if_greater", new ReplaceIfGreaterCommand("replace_if_greater", ClientController.getReader()));
         commandMap.put("remove_lower_key", new RemoveKeyCommand("remove_key_command"));
         commandMap.put("group_counting_by_length", new GroupCountingByLengthCommand("group_counting_by_length"));
         commandMap.put("count_less_than_length", new CountLessThenLengthCommand("count_less_than_length"));
@@ -64,5 +62,9 @@ public class ClientExecutor {
         history.add(commandName);
         RequestBuilder.createNewRequest(commandName);
         command.buildRequest();
+    }
+
+    public static HashMap<String,Command> getCommandMap() {
+        return commandMap;
     }
 }

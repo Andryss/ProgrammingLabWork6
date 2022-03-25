@@ -3,6 +3,7 @@ package MovieObjects;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -143,7 +144,7 @@ public class Movie implements Comparable<Movie>, Serializable {
             return;
         }
         try {
-            this.genre = MovieGenre.valueOf(genre);
+            this.genre = MovieGenre.valueOf(genre.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             throw new FieldException(genre, "Value must be one of: " + Arrays.toString(MovieGenre.values()));
         }
@@ -157,7 +158,7 @@ public class Movie implements Comparable<Movie>, Serializable {
     @FieldSetter(fieldName = "mpaaRating", example = "it must be one of: [G, PG, PG_13, R, NC_17]", index = 6)
     public void setMpaaRating(String mpaaRating) throws FieldException {
         try {
-            this.mpaaRating = MpaaRating.valueOf(mpaaRating);
+            this.mpaaRating = MpaaRating.valueOf(mpaaRating.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             throw new FieldException(mpaaRating, "Value must be one of: " + Arrays.toString(MpaaRating.values()));
         }

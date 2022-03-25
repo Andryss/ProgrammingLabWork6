@@ -13,24 +13,26 @@ public class ClientMain {
 
     public static void main(String[] args) {
         while (true) {
-            String serverName = readServerName();
             try {
-                ClientManager.run(serverName, port);
-            } catch (SocketException e) {
-                System.err.println("The socket could not be opened: " + e.getMessage());
-            } catch (UnknownHostException ignore) {
-                // ignore
-            } catch (IOException | ClassNotFoundException e) {
-                System.err.println(e.getMessage());
-                break;
+                InetAddress serverAddress = readServerAddress();
+                ClientController.println("Connecting to server \"" + serverAddress + "\"");
+                try {
+                    ClientManager.run(serverAddress, port);
+                } catch (SocketException e) {
+                    ClientController.println("The socket could not be opened: " + e.getMessage());
+                    break;
+                } catch (IOException | ClassNotFoundException e) {
+                    ClientController.printlnErr(e.getMessage());
+                    break;
+                }
             } catch (NoSuchElementException e) {
-                System.err.println("Incorrect input (EOF). Bye!");
+                ClientController.println("Incorrect input (EOF). Bye!");
                 break;
             }
         }
     }
 
-    private static String readServerName() {
+    private static InetAddress readServerAddress() {
         ClientController.print("Enter server domain name or IP (or \"exit\"): ");
         while (true) {
             String line = ClientController.readLine().trim();
@@ -40,15 +42,15 @@ public class ClientMain {
             try {
                 try {
                     byte[] address = parseAddress(line);
-                    return InetAddress.getByAddress(address).getHostAddress();
+                    return InetAddress.getByAddress(address);
                 } catch (IOException ignore) {
                     //ignore
                 }
                 if (InetAddress.getAllByName(line).length > 0) {
-                    return line;
+                    return InetAddress.getByName(line);
                 }
             } catch (UnknownHostException e) {
-                ClientController.printlnErr("Unknown host \"" + line + "\"");
+                ClientController.println("\u001B[31m" + "Unknown host \"" + line + "\"" + "\u001B[0m");
                 ClientController.print("Enter VALID server domain name or IP: ");
             }
         }

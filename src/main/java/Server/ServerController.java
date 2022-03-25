@@ -1,13 +1,19 @@
 package Server;
 
-import java.io.PrintStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class ServerController {
 
-    private static final PrintStream writer = System.out;
+    private static final Logger logger = LogManager.getLogger();
 
-    public static void println(String line) {
-        writer.println(line);
+    public static void info(String message) {
+        logger.info(message);
+    }
+
+    public static void error(String message, Throwable error) {
+        logger.error(message,error);
     }
 
 }

@@ -9,6 +9,8 @@ public class ClientController {
     private static final PrintStream writer = System.out;
     private static final PrintStream errWriter = System.err;
 
+    private ClientController() {}
+
     static void initialize() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("\u001B[36m" + "THANK YOU for choosing our app to work with collections.\n" +
                 "Developers are searching for the best realizations. Have a nice day :)" + "\u001B[0m")));

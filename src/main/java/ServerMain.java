@@ -1,4 +1,5 @@
 import MovieObjects.FieldException;
+import Server.ServerController;
 import Server.ServerManager;
 
 import java.io.IOException;
@@ -11,10 +12,10 @@ public class ServerMain {
         try {
             ServerManager.run(port);
         } catch (FieldException e) {
-            System.err.println("Problems with Movie File: " + e.getMessage());
+            ServerController.error("Problems with Movie File: " + e.getMessage(), e);
             //e.printStackTrace();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            ServerController.error(e.getMessage(), e);
             //e.printStackTrace();
         }
     }

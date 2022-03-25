@@ -12,19 +12,17 @@ public class ServerManager {
     }
 
     public static void run(int port) throws IOException, FieldException {
-        ServerController.println("Initializations start");
+        ServerController.info("Initializations start");
         initializations(port);
-        ServerController.println("Initializations completed");
-        ServerController.println("Server started at: " + InetAddress.getLocalHost());
+        ServerController.info("Initializations completed");
+        ServerController.info("Server started at: " + InetAddress.getLocalHost());
 
         while (true) {
             try {
                 ServerExecutor.executeRequest(ServerConnector.receiveRequest());
                 ServerConnector.sendToClient(ResponseBuilder.getResponse());
             } catch (ClassNotFoundException | IOException e) {
-                // TODO: add logging of incorrect read class
-                ServerController.println(e.getMessage());
-                e.printStackTrace();
+                ServerController.error(e.getMessage(), e);
             }
         }
     }

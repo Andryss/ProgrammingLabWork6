@@ -17,7 +17,7 @@ public class ServerConnector extends Connector {
     private static DatagramChannel channel;
     private static Selector selector;
     private static SocketAddress client;
-    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(12000);
+    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(65507);
 
     private ServerConnector() {}
 
@@ -35,7 +35,7 @@ public class ServerConnector extends Connector {
     }
 
     static Request receiveRequest() throws IOException, ClassNotFoundException {
-        ServerController.println("Ready for receiving");
+        ServerController.info("------------------------------- Ready for receiving -------------------------------");
 
         infinity:
         while (true) {
@@ -52,9 +52,9 @@ public class ServerConnector extends Connector {
         }
 
         client = channel.receive(dataBuffer);
-
         Request request = objectFromBuffer(dataBuffer.array());
-        ServerController.println(request.getCommandQueue().toString());
+
+        ServerController.info("Received " + dataBuffer.position() + " bytes buffer with queue " + request.getCommandQueue().toString());
 
         dataBuffer.clear();
 
@@ -62,7 +62,7 @@ public class ServerConnector extends Connector {
     }
 
     static void sendToClient(Response response) {
-        ServerController.println("Sending to client starts");
+        ServerController.info("Sending to client " + client.toString() + " starts");
 
         try {
             dataBuffer.put(objectToBuffer(response));
@@ -70,14 +70,9 @@ public class ServerConnector extends Connector {
             channel.send(dataBuffer, client);
             dataBuffer.clear();
         } catch (IOException e) {
-            // TODO: add logging of problems with client
-            e.printStackTrace();
+            ServerController.error(e.getMessage(), e);
         }
 
-        ServerController.println("Sending to client completed");
-    }
-
-    public static DatagramChannel getChannel() {
-        return channel;
+        ServerController.info("Sending to client completed");
     }
 }

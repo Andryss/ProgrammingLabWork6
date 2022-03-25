@@ -21,8 +21,7 @@ public class GroupCountingByLengthCommand extends NameableCommand {
         }
         ResponseBuilder.add("*groups by length*");
         server.getCollection().values().stream()
-                .map(Movie::getLength)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .collect(Collectors.groupingBy(Movie::getLength, Collectors.counting()))
                 .forEach((length, count) -> ResponseBuilder.add(count + " movies with length " + length));
         return true;
     }
