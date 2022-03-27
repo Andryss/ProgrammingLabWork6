@@ -1,6 +1,5 @@
 package Server;
 
-import Client.Connector;
 import Client.Request;
 
 import java.io.IOException;
@@ -17,11 +16,11 @@ import java.util.Set;
  * <p>ServerConnector implements (1) and (3) steps in ServerManager</p>
  * <p>There are some methods to send and receive datagrams</p>
  */
-public class ServerConnector extends Connector {
+public class ServerConnector {
     private static DatagramChannel channel;
     private static Selector selector;
     private static SocketAddress client;
-    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(65507);
+    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(12000);
 
     private ServerConnector() {}
 
@@ -56,7 +55,7 @@ public class ServerConnector extends Connector {
         }
 
         client = channel.receive(dataBuffer);
-        Request request = objectFromBuffer(dataBuffer.array());
+        Request request = ConnectorHelper.objectFromBuffer(dataBuffer.array());
 
         ServerController.info("Received " + dataBuffer.position() + " bytes buffer with queue " + request.getCommandQueue().toString());
 
@@ -69,7 +68,7 @@ public class ServerConnector extends Connector {
         ServerController.info("Sending to client " + client.toString() + " starts");
 
         try {
-            dataBuffer.put(objectToBuffer(response));
+            dataBuffer.put(ConnectorHelper.objectToBuffer(response));
             dataBuffer.flip();
             channel.send(dataBuffer, client);
             dataBuffer.clear();

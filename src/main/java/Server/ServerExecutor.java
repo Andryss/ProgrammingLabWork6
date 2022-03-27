@@ -22,6 +22,8 @@ public class ServerExecutor {
     private static final String envName = "MovieFile";
     private static ServerINFO serverINFO;
 
+    private ServerExecutor() {}
+
     static void initialize() throws FieldException, IOException {
         serverINFO = new ServerINFO();
         serverINFO.setCollectionFilename(System.getenv(envName));

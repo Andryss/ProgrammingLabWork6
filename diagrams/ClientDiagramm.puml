@@ -1,0 +1,125 @@
+@startuml
+
+package Client {
+    class Request {
+    --Fields--
+    - final String commandName
+    - final Queue<Command> commandQueue = new LinkedList<>()
+    --Constructors--
+    + Request(String commandName)
+    --Methods--
+    ~ add(Command command) : void
+    + getCommandName() : String
+    + getCommandQueue() : Queue<Command>
+    }
+
+    class RequestBuilder {
+    --Fields--
+    - static Request request
+    --Constructors--
+    - RequestBuilder()
+    --Methods--
+    + static createNewRequest(String commandName) : void
+    + static createNewRequest(NameableCommand command) : void
+    + static add(Command command) : void
+    + static getRequest() : Request
+    }
+
+    class ClientManager {
+    --Fields--
+    --Constructors--
+    --Methods--
+    + static run(InetAddress serverAddress, int port) : void
+    - static initializations(InetAddress serverAddress, int port) : void
+    }
+
+    class ClientExecutor {
+    --Fields--
+    - static final HashMap<String, Command> commandMap = new HashMap<>()
+    - static final List<String> history = new LinkedList<>()
+    --Constructors--
+    --Methods--
+    ~ static initialize() : void
+    - static fillCommandMap() : void
+    ~ static parseCommand(String inputLine) : void
+    - static executeCommand(String commandName, String[] args) : void
+    + static getCommandMap() : HashMap<String,Command>
+    }
+
+    class ClientConnector {
+    --Fields--
+    - static final Scanner reader = new Scanner(System.in)
+    - static final PrintStream writer = System.out
+    - static final PrintStream errWriter = System.err
+    --Constructors--
+    - ClientController()
+    --Methods--
+    ~ static initialize() : void
+    + static readLine() : String
+    + static println(String line) : void
+    + static print(String line) : void
+    + static printlnErr(String line) : void
+    + static getReader() : Scanner
+    }
+
+    class ClientConnector {
+    --Fields--
+    - static DatagramSocket socket
+    - static InetAddress serverAddress
+    - static int serverPort
+    - static final ByteBuffer dataBuffer = ByteBuffer.allocate(65507)
+    --Constructors--
+    - ClientConnector()
+    --Methods--
+    ~ static initialize(InetAddress serverAddress, int port) : void
+    - static setConnection(InetAddress serverAddress, int port) : void
+    - static checkConnection() : void
+    ~ static sendToServer(Request request) : Response
+    - static sendRequest(Request request) : void
+    - static sendPacket(byte[] buf) : void
+    - static acceptResponse() : Response
+    - static receivePacket(byte[] buf) : void
+    }
+
+    package File {
+        class FileManager {
+        --Fields--
+        - final FileController controller
+        - final FileExecutor executor
+        --Constructors--
+        + FileManager(File file, FileExecutor caller)
+        --Methods--
+        + buildRequest() : void
+        }
+
+        class FileExecutor {
+        --Fields--
+        - HashMap<String, Command> commandMap = new HashMap<>()
+        - final FileExecutor caller
+        - final String fileName
+        - int commandNumber = 1
+        --Constructors--
+        + FileExecutor(FileController fileController, FileExecutor caller)
+        --Methods--
+        - fillCommandMap(Scanner reader) : void
+        ~ parseCommand(String inputLine) : void
+        - executeCommand(String commandName, String[] args) : void
+        + getters
+        }
+
+        class FileController {
+        --Fields--
+        - final Scanner reader
+        - final File file
+        --Constructors--
+        + FileController(File file)
+        --Methods--
+        + readLine() : String
+        + hasNextLine() : boolean
+        + getReader() : Scanner
+        + getFileName() : String
+        }
+    }
+}
+
+@enduml

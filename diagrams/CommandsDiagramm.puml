@@ -1,0 +1,228 @@
+@startuml
+
+package Commands {
+    class CommandException {
+    --Fields--
+    - final String command
+    - final String reason
+    --Constructors--
+    + CommandException(String command)
+    + CommandException(String command, String reason)
+    --Methods--
+    + getCommand() : String
+    + getReason() : String
+    + getMessage() : String
+    }
+
+    class BadArgumentsException extends CommandException {
+    --Fields--
+    - static final Map<String, String> examples = new HashMap<>()
+    --Constructors--
+    + BadArgumentsException(String command)
+    + BadArgumentsException(String command, String reason)
+    --Methods--
+    + static getExamples() : Map<String, String>
+    + getMessage() : String
+    }
+
+    class BadArgumentsCountException extends BadArgumentsException {
+    --Fields--
+    - final int requiredCount
+    --Constructors--
+    + BadArgumentsCountException(String command, int requiredCount)
+    + BadArgumentsCountException(String command)
+    --Methods--
+    + getMessage() : String
+    }
+
+    class BadArgumentsFormatException extends BadArgumentsException {
+    --Fields--
+    - final String requiredFormat
+    --Constructors--
+    + BadArgumentsFormatException(String command, String requiredFormat)
+    --Methods--
+    + getMessage() : String
+    }
+
+    class UndefinedCommandException extends CommandException {
+    --Fields--
+    --Constructors--
+    + UndefinedCommandException(String command)
+    --Methods--
+    + getMessage() : String
+    }
+
+    interface Command {
+    --Methods--
+    execute(ExecuteState state) : boolean
+    setArgs(String... args) : void
+    default buildRequest() : void
+    }
+
+    abstract class NameableCommand implements Command {
+    --Fields--
+    - final String commandName
+    --Constructors--
+    + NameableCommand(String commandName)
+    --Methods--
+    + println(String line) : void
+    + getCommandName() : String
+    }
+
+    abstract class ElementCommand extends HashTableCommand {
+    --Fields--
+    - static final Map<String, String> fieldExamples = new HashMap<>()
+    - static final Map<String, Method> methodsSetters = new HashMap<>()
+    - static final Map<Integer, String> order = new HashMap<>()
+    - final transient boolean readingFromFile
+    # transient Scanner reader
+    # Integer key
+    # Movie readMovie
+    --Constructors--
+    + ElementCommand(String commandName, Scanner reader, boolean readingFromFile)
+    --Methods--
+    - static fillMethodsSetters(Map<String, Method> emptyMethodsSetters, Class<?> cls) : void
+    # readOneField(String fieldName) : String
+    # setOneField(Object object, String fieldName, Method method) : void
+    # readMovie(Executor.ExecuteState state) : Movie
+    + setArgs(String... args) : void
+    }
+
+    class ClearCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + ClearCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class CountLessThenLengthCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + CountLessThenLengthCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class ExecuteScriptCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + ExecuteScriptCommand(String commandName, FileExecutor caller)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    + buildRequest() : void
+    }
+
+    class ExitCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + ExitCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class FilterByMpaaRatingCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + FilterByMpaaRatingCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class GroupCountingByLengthCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + GroupCountingByLengthCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class HelpCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + HelpCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class HistoryCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + HistoryCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class InfoCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + InfoCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class InsertCommand extends ElementCommand {
+    --Fields--
+    --Constructors--
+    + InsertCommand(String commandName, Scanner reader)
+    + InsertCommand(String commandName, Scanner reader, boolean readingFromFile)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    }
+
+    class RemoveKeyCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + RemoveKeyCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class RemoveLowerKeyCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + RemoveLowerKeyCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class ReplaceIfGreaterCommand extends ElementCommand {
+    --Fields--
+    --Constructors--
+    + ReplaceIfGreaterCommand(String commandName, Scanner reader)
+    + ReplaceIfGreaterCommand(String commandName, Scanner reader, boolean readingFromFile)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    }
+
+    class ShowCommand extends NameableCommand {
+    --Fields--
+    --Constructors--
+    + ShowCommand(String commandName)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    + setArgs(String... args) : void
+    }
+
+    class UpdateCommand extends ElementCommand {
+    --Fields--
+    --Constructors--
+    + UpdateCommand(String commandName, Scanner reader)
+    + UpdateCommand(String commandName, Scanner reader, boolean readingFromFile)
+    --Methods--
+    + execute(ServerExecutor.ExecuteState state, ServerINFO server) : boolean
+    }
+}
+
+@enduml

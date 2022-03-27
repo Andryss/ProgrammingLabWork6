@@ -1,0 +1,122 @@
+@startuml
+
+package MovieObjects {
+    class JsonMovieCodec {
+    --Fields--
+    --Methods--
+    + static readFromFile(String fileName) : Hashtable<Integer, Movie>
+    - static parseMovie(JsonObject movieJsonObject) : Movie
+    + static writeToFile(String fileName, Hashtable<Integer, Movie> movieHashtable) : void
+    - static buildHashTableElement(Integer key, Movie currentMovie) : JsonObject
+    }
+
+    annotation FieldSetter {
+    fieldName() : String
+    example() : String
+    index() : int
+    }
+
+    class Coordinates {
+    --Fields--
+    - float x
+    - Float y
+    --Constructors--
+    + Coordinates()
+    --Methods--
+    + setX(String xString) : void
+    + setY(String yString) : void
+    + getters
+    + toString, equals, hashCode
+    }
+
+    class Person {
+    --Fields--
+    - String name
+    - Date birthday
+    - Color hairColor
+    --Constructors--
+    + Person()
+    --Methods--
+    + setName(String name) : void
+    + setBirthday(String birthday) : void
+    + setHairColor(String hairColor) : void
+    + getBirthdayString() : String
+    + getters
+    + toString, equals, hashCode
+    --InnerClasses--
+    + enum Color
+    }
+
+    enum Color {
+    RED
+    BLACK
+    BLUE
+    WHITE
+    BROWN
+    }
+
+    Color -up-+ Person
+
+    class Movie {
+    --Fields--
+    - final long id
+    - String name
+    - Coordinates coordinates
+    - final ZonedDateTime creationDate
+    - long oscarsCount
+    - int length
+    - MovieGenre genre
+    - MpaaRating mpaaRating
+    - Person screenwriter
+    ~ static long global_id = 1
+    --Constructors--
+    + Movie()
+    + Movie(long id, ZonedDateTime creationDate)
+    --Methods--
+    ~ static loadGlobalId(String globalIdString) : void
+    + setName(String name) : void
+    + setCoordinates(Coordinates coordinates) : void
+    + setOscarsCount(String oscarsCountString) : void
+    + setLength(String lengthString) : void
+    + setGenre(String genre) : void
+    + setMpaaRating(String mpaaRating) : void
+    + setScreenwriter(Person screenwriter) : void
+    + compareTo(Movie anotherMovie) : int
+    + getters
+    + toString, equals, hashCode
+    --InnerClasses--
+    + enum MpaaRating
+    + enum MovieGenre
+    }
+
+    enum MpaaRating {
+    G
+    PG
+    PG_13
+    R
+    NC_17
+    }
+
+    enum MovieGenre {
+    ACTION
+    WESTERN
+    DRAMA
+    COMEDY
+    HORROR
+    }
+
+    MpaaRating -up-+ Movie
+    MovieGenre -up-+ Movie
+
+    class FieldException {
+    --Fields--
+    - final String value
+    - final String required
+    --Constructors--
+    + FieldException(String value, String required)
+    --Methods--
+    + getMessage() : String
+    }
+}
+
+@enduml

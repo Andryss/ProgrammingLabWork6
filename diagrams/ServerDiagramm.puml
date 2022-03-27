@@ -1,0 +1,101 @@
+@startuml
+
+package Server {
+    class Response {
+    --Fields--
+    - StringBuilder message
+    --Constructors--
+    --Methods--
+    ~ addMessage(String message) : void
+    + getMessage() : String
+    }
+
+    class ResponseBuilder {
+    --Fields--
+    - static Response response
+    --Constructors--
+    - ResponseBuilder()
+    --Methods--
+    ~ static createNewResponse() : void
+    ~ static createNewResponse(String line) : void
+    + static add(String line) : void
+    ~ static getResponse() : Response
+    }
+
+    abstract class ConnectorHelper {
+    --Fields--
+    --Constructors--
+    --Methods--
+    + static <T> objectToBuffer(T obj) : byte[]
+    + static <T> objectFromBuffer(byte[] data) : T
+    }
+
+    class ServerManager {
+    --Fields--
+    --Constructors--
+    - ServerManager()
+    --Methods--
+    + static run(int port) : void
+    - static initializations(int port) : void
+    }
+
+    class ServerExecutor {
+    --Fields--
+    - static final String envName = "MovieFile"
+    - static ServerINFO serverINFO
+    --Constructors--
+    - ServerExecutor()
+    --Methods--
+    ~ static initialize() : void
+    - static validateCommands(Queue<Command> commandQueue) : void
+    - static executeCommands(Queue<Command> commandQueue) : void
+    ~ executeRequest(Request request) : void
+    ~ static saveCollection() : void
+    --InnerClasses--
+    + enum ExecuteState
+    }
+
+    enum ExecuteState {
+    EXECUTE,
+    VALIDATE
+    }
+
+    ExecuteState -up-+ ServerExecutor
+
+    class ServerController {
+    --Fields--
+    - static final Logger logger = LogManager.getLogger()
+    --Constructors--
+    - ServerController()
+    --Methods--
+    + static info(String message) : void
+    + static error(String message, Throwable error) : void
+    }
+
+    class ServerConnector {
+    --Fields--
+    - static DatagramChannel channel
+    - static Selector selector
+    - static SocketAddress client
+    - static final ByteBuffer dataBuffer = ByteBuffer.allocate(65507)
+    --Constructors--
+    - ServerConnector()
+    --Methods--
+    ~ static initialize(int port) : void
+    - static bindChannel(int port) : void
+    ~ static receiveRequest() : Request
+    ~ static sendToClient(Response response) : void
+    }
+
+    class ServerINFO {
+    --Fields--
+    - Hashtable<Integer,Movie> collection
+    - String collectionFilename
+    --Constructors--
+    --Methods--
+    + getters/setters
+    + clone() : ServerINFO
+    }
+}
+
+@enduml

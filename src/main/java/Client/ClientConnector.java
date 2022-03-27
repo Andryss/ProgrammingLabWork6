@@ -1,6 +1,7 @@
 package Client;
 
 import Commands.HelpCommand;
+import Server.ConnectorHelper;
 import Server.Response;
 
 import java.io.*;
@@ -11,11 +12,11 @@ import java.nio.ByteBuffer;
  * <p>ClientConnector implements (3) step in ClientManager</p>
  * <p>There are some methods to send and receive datagrams</p>
  */
-public class ClientConnector extends Connector {
+public class ClientConnector {
     private static DatagramSocket socket;
     private static InetAddress serverAddress;
     private static int serverPort;
-    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(65507);
+    private static final ByteBuffer dataBuffer = ByteBuffer.allocate(12000);
 
     private ClientConnector() {}
 
@@ -58,7 +59,7 @@ public class ClientConnector extends Connector {
     }
 
     private static void sendRequest(Request request) throws IOException {
-        sendPacket(objectToBuffer(request));
+        sendPacket(ConnectorHelper.objectToBuffer(request));
     }
 
     private static void sendPacket(byte[] buf) throws IOException {
@@ -68,7 +69,7 @@ public class ClientConnector extends Connector {
 
     private static Response acceptResponse() throws IOException, ClassNotFoundException {
         receivePacket(dataBuffer.array());
-        Response response = objectFromBuffer(dataBuffer.array());
+        Response response = ConnectorHelper.objectFromBuffer(dataBuffer.array());
         dataBuffer.clear();
         return response;
     }

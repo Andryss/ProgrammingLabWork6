@@ -11,6 +11,8 @@ public class ServerController {
 
     private static final Logger logger = LogManager.getLogger();
 
+    private ServerController() {}
+
     public static void info(String message) {
         logger.info(message);
     }

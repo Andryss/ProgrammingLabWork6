@@ -13,6 +13,8 @@ import java.net.InetAddress;
  */
 public class ServerManager {
 
+    private ServerManager() {}
+
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(ServerExecutor::saveCollection));
     }
