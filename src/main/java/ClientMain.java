@@ -26,7 +26,7 @@ public class ClientMain {
                     break;
                 }
             } catch (NoSuchElementException e) {
-                ClientController.println("Incorrect input (EOF). Bye!");
+                ClientController.printlnErr("Incorrect input (EOF). Try not to be so unpredictable!");
                 break;
             }
         }

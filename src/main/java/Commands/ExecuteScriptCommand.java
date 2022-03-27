@@ -1,16 +1,21 @@
 package Commands;
 
-import Client.FileExecutor;
-import Client.FileManager;
+import Client.File.FileExecutor;
+import Client.File.FileManager;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Command, which reads and executes script from file
+ * @see NameableCommand
+ * @see FileManager
+ */
 public class ExecuteScriptCommand extends NameableCommand {
     private File file;
-    private FileExecutor caller;
+    private final FileExecutor caller;
 
     public ExecuteScriptCommand(String commandName, FileExecutor caller) {
         super(commandName);

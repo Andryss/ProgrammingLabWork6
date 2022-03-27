@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Command, which prints an elements whose "mpaaRating" is equal to the given
+ * @see NameableCommand
+ */
 public class FilterByMpaaRatingCommand extends NameableCommand {
     private Movie.MpaaRating mpaaRating;
 

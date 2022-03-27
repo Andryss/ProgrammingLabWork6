@@ -1,10 +1,15 @@
-package Client;
+package Client.File;
 
 import Commands.CommandException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * <p>FileManager consist of main file reading logic:</p>
+ * <p>1) Read line from file</p>
+ * <p>2) Try to parse command build Request</p>
+ */
 public class FileManager {
 
     private final FileController controller;

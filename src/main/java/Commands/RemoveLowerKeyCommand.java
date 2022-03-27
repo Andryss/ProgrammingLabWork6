@@ -3,6 +3,10 @@ package Commands;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
+/**
+ * Command, which removes all elements whose key is less than given
+ * @see NameableCommand
+ */
 public class RemoveLowerKeyCommand extends NameableCommand {
     private Integer key;
 

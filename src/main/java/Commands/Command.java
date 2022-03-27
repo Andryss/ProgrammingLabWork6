@@ -25,6 +25,10 @@ public interface Command extends Serializable {
      */
     void setArgs(String... args) throws BadArgumentsException;
 
+    /**
+     * Build Request depending on command type
+     * @throws CommandException if something wrong with building Request
+     */
     default void buildRequest() throws CommandException {
         RequestBuilder.add(this);
     }

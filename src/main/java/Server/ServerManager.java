@@ -5,6 +5,12 @@ import MovieObjects.FieldException;
 import java.io.IOException;
 import java.net.InetAddress;
 
+/**
+ * <p>ServerManager consist of main server logic:</p>
+ * <p>1) Receive Request from client</p>
+ * <p>2) Execute commands and build Response</p>
+ * <p>3) Send Response to client</p>
+ */
 public class ServerManager {
 
     static {

@@ -2,6 +2,10 @@ package Client;
 
 import java.io.*;
 
+/**
+ * <p>Class helper for connector classes.</p>
+ * <p>Consist of just "reading object from byte buffer" and "write object to byte buffer"</p>
+ */
 public abstract class Connector {
 
     public static <T> byte[] objectToBuffer(T obj) throws IOException {

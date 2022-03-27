@@ -4,6 +4,13 @@ import Commands.*;
 
 import java.util.*;
 
+/**
+ * <p>ClientExecutor implements (2) step in ClientManager:</p>
+ * <p>1) Split input into command name and args</p>
+ * <p>2) Check if command name is valid</p>
+ * <p>3) Check if args for this command is valid</p>
+ * <p>4) Make command build Request</p>
+ */
 public class ClientExecutor {
     /**
      * Map with command, where key is a name of command and value is a class of command
@@ -31,7 +38,7 @@ public class ClientExecutor {
         commandMap.put("exit", new ExitCommand("exit"));
         commandMap.put("history", new HistoryCommand("history", history));
         commandMap.put("replace_if_greater", new ReplaceIfGreaterCommand("replace_if_greater", ClientController.getReader()));
-        commandMap.put("remove_lower_key", new RemoveKeyCommand("remove_key_command"));
+        commandMap.put("remove_lower_key", new RemoveLowerKeyCommand("remove_key_command"));
         commandMap.put("group_counting_by_length", new GroupCountingByLengthCommand("group_counting_by_length"));
         commandMap.put("count_less_than_length", new CountLessThenLengthCommand("count_less_than_length"));
         commandMap.put("filter_by_mpaa_rating", new FilterByMpaaRatingCommand("filter_by_mpaa_rating"));

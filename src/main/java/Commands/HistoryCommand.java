@@ -1,11 +1,14 @@
 package Commands;
 
-import Server.ResponseBuilder;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
 import java.util.List;
 
+/**
+ * Command, which prints last 13 commands (without arguments)
+ * @see NameableCommand
+ */
 public class HistoryCommand extends NameableCommand {
 
     private final List<String> history;

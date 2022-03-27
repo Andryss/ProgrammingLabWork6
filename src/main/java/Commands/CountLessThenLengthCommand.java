@@ -1,9 +1,12 @@
 package Commands;
 
-import MovieObjects.Movie;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
+/**
+ * Command, which prints the number of elements whose "length" less than the given
+ * @see NameableCommand
+ */
 public class CountLessThenLengthCommand extends NameableCommand {
 
     private int length;

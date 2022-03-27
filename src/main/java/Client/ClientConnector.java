@@ -7,6 +7,10 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 
+/**
+ * <p>ClientConnector implements (3) step in ClientManager</p>
+ * <p>There are some methods to send and receive datagrams</p>
+ */
 public class ClientConnector extends Connector {
     private static DatagramSocket socket;
     private static InetAddress serverAddress;

@@ -2,6 +2,9 @@ package Server;
 
 import java.io.Serializable;
 
+/**
+ * Response class contains all information the server can send to client in one class
+ */
 public class Response implements Serializable {
 
     private StringBuilder message;

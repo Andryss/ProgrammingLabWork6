@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Request class contains all information client can send to the server in one class
+ */
 public class Request implements Serializable {
 
     private final String commandName;

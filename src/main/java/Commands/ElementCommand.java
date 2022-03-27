@@ -41,7 +41,13 @@ public abstract class ElementCommand extends NameableCommand {
      * Scanner for reading elements from something
      */
     protected transient Scanner reader;
+    /**
+     * Given element key
+     */
     protected Integer key;
+    /**
+     * Read Movie element
+     */
     protected Movie readMovie;
 
     static {
@@ -148,6 +154,9 @@ public abstract class ElementCommand extends NameableCommand {
         return newMovie;
     }
 
+    /**
+     * @see Command
+     */
     @Override
     public void setArgs(String... args) throws BadArgumentsException {
         if (args.length != 1) {

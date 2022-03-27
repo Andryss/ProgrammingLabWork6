@@ -3,6 +3,10 @@ package Client;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+/**
+ * <p>ClientController implements (1) and (4) steps in ClientManager</p>
+ * <p>The main idea of this class is "to speak" with the user</p>
+ */
 public class ClientController {
 
     private static final Scanner reader = new Scanner(System.in);

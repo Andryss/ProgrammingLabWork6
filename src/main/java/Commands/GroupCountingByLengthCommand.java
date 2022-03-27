@@ -5,9 +5,12 @@ import Server.ResponseBuilder;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Command, which groups the elements by the value of the "length" field, prints the number of elements in each group
+ * @see NameableCommand
+ */
 public class GroupCountingByLengthCommand extends NameableCommand {
 
     public GroupCountingByLengthCommand(String commandName) {

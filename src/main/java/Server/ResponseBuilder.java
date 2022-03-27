@@ -1,5 +1,8 @@
 package Server;
 
+/**
+ * Global class, which build one response to client (especially for not sending one Response through all methods)
+ */
 public class ResponseBuilder {
     private static Response response;
 

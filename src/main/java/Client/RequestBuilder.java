@@ -3,6 +3,9 @@ package Client;
 import Commands.Command;
 import Commands.NameableCommand;
 
+/**
+ * Global class, which build one request from client (especially for not sending one Request through all methods)
+ */
 public class RequestBuilder {
 
     private static Request request;

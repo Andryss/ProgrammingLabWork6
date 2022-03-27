@@ -1,9 +1,12 @@
 package Commands;
 
-import Server.ResponseBuilder;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
+/**
+ * Command, which deletes an element with given key
+ * @see NameableCommand
+ */
 public class RemoveKeyCommand extends NameableCommand {
     private Integer key;
 

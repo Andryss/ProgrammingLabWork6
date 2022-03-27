@@ -4,6 +4,9 @@ import MovieObjects.Movie;
 
 import java.util.Hashtable;
 
+/**
+ * Class ServerINFO contains of all the information, that can be useful for commands (collection, name of file etc.)
+ */
 public class ServerINFO implements Cloneable {
 
     private Hashtable<Integer,Movie> collection;

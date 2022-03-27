@@ -1,10 +1,13 @@
 package Commands;
 
-
 import Server.ResponseBuilder;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
+/**
+ * Command, which prints all elements in the collection
+ * @see NameableCommand
+ */
 public class ShowCommand extends NameableCommand {
 
     public ShowCommand(String commandName) {

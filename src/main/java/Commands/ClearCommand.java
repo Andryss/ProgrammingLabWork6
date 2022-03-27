@@ -3,6 +3,10 @@ package Commands;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
+/**
+ * Command, which clears the collection
+ * @see NameableCommand
+ */
 public class ClearCommand extends NameableCommand {
 
     public ClearCommand(String commandName) {

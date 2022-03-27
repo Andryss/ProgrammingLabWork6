@@ -14,11 +14,6 @@ public class HelpCommand extends NameableCommand {
         super(commandName);
     }
 
-    /**
-     * @param state tells method "to validate" or "to execute"
-     * @see ServerExecutor.ExecuteState
-     * @see Command
-     */
     @Override
     public boolean execute(ServerExecutor.ExecuteState state, ServerINFO serverINFO) {
         if (state == ServerExecutor.ExecuteState.VALIDATE) {
@@ -43,10 +38,6 @@ public class HelpCommand extends NameableCommand {
         return true;
     }
 
-    /**
-     * @see Command
-     * @see BadArgumentsException
-     */
     @Override
     public void setArgs(String... args) throws BadArgumentsException {
         if (args.length > 0) {

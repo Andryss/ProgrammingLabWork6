@@ -1,11 +1,14 @@
 package Commands;
 
-import MovieObjects.Movie;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
 import java.util.Scanner;
 
+/**
+ * Command, which replaces an element by key if the new value is greater than the old one
+ * @see NameableCommand
+ */
 public class ReplaceIfGreaterCommand extends ElementCommand {
 
     public ReplaceIfGreaterCommand(String commandName, Scanner reader) {

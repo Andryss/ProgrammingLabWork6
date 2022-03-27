@@ -1,5 +1,6 @@
-package Client;
+package Client.File;
 
+import Client.ClientExecutor;
 import Commands.*;
 import Server.ServerExecutor;
 import Server.ServerINFO;
@@ -8,6 +9,10 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * <p>FileExecutor implements (2) step in FileManager:</p>
+ * <p>*** do same things as ClientExecutor but with some changes in commands ***</p>
+ */
 public class FileExecutor {
     private HashMap<String, Command> commandMap = new HashMap<>();
     private final FileExecutor caller;

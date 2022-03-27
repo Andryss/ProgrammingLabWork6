@@ -3,6 +3,10 @@ package Commands;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
+/**
+ * Command, which ends the client program (without saving)
+ * @see NameableCommand
+ */
 public class ExitCommand extends NameableCommand {
 
     public ExitCommand(String commandName) {

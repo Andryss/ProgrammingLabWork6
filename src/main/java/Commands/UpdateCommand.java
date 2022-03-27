@@ -1,11 +1,14 @@
 package Commands;
 
-import MovieObjects.Movie;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
 import java.util.Scanner;
 
+/**
+ * Command, which updates an element with given id
+ * @see NameableCommand
+ */
 public class UpdateCommand extends ElementCommand {
 
     public UpdateCommand(String commandName, Scanner reader) {

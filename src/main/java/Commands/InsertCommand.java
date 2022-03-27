@@ -1,11 +1,14 @@
 package Commands;
 
-import MovieObjects.Movie;
 import Server.ServerExecutor;
 import Server.ServerINFO;
 
 import java.util.Scanner;
 
+/**
+ * Command, which adds new element with given key
+ * @see NameableCommand
+ */
 public class InsertCommand extends ElementCommand {
 
     public InsertCommand(String commandName, Scanner reader) {

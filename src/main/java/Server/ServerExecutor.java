@@ -9,6 +9,12 @@ import Commands.CommandException;
 import java.io.IOException;
 import java.util.Queue;
 
+/**
+ * <p>ServerExecutor implements (2) step in ServerManager:</p>
+ * <p>1) Get command queue from Request</p>
+ * <p>2) Validate it in some times</p>
+ * <p>3) Execute commands and make them build Response</p>
+ */
 public class ServerExecutor {
     /**
      * Name of environment variable with filename

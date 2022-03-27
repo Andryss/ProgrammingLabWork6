@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 
+/**
+ * Command, which prints short info about the collection (type, init date, length etc.)
+ * @see NameableCommand
+ */
 public class InfoCommand extends NameableCommand {
 
     public InfoCommand(String commandName) {
