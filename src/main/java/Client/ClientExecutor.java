@@ -61,11 +61,7 @@ public class ClientExecutor {
         if (command == null) {
             throw new UndefinedCommandException(commandName);
         }
-        try {
-            command.setArgs(args);
-        } catch (NoSuchElementException e) {
-            ClientController.printlnErr("Invalid input: \"EOF\"");
-        }
+        command.setArgs(args);
         history.add(commandName);
         RequestBuilder.createNewRequest(commandName);
         command.buildRequest();

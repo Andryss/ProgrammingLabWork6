@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 public class ClientMain {
 
-    private static final int port = 7364;
+    private static final int port = 52927;
 
     public static void main(String[] args) {
         while (true) {

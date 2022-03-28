@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class ServerMain {
 
-    private static final int port = 7364;
+    private static final int port = 52927;
 
     public static void main(String[] args) {
         try {
@@ -14,10 +14,9 @@ public class ServerMain {
         } catch (FieldException e) {
             ServerController.error("Problems with Movie File: " + e.getMessage(), e);
             //e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Throwable e) {
             ServerController.error(e.getMessage(), e);
             //e.printStackTrace();
         }
     }
-
 }

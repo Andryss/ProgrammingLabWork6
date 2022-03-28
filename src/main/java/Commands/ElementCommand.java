@@ -95,7 +95,7 @@ public abstract class ElementCommand extends NameableCommand {
      * @param fieldName name of field we read
      * @return string - user input or null
      */
-    protected String readOneField(String fieldName) throws NoSuchElementException {
+    protected String readOneField(String fieldName) {
         if (!readingFromFile) {
             ClientController.print("Enter " + fieldName + " (" + fieldExamples.get(fieldName) + "): ");
         }
@@ -109,7 +109,7 @@ public abstract class ElementCommand extends NameableCommand {
      * @param fieldName name of field we set
      * @param method setter we invoke
      */
-    protected void setOneField(Object object, String fieldName, Method method) throws NoSuchElementException {
+    protected void setOneField(Object object, String fieldName, Method method) {
         while (true) {
             try {
                 method.invoke(object, readOneField(fieldName));
@@ -126,7 +126,7 @@ public abstract class ElementCommand extends NameableCommand {
      * Main method. Read one element from reader
      * @return reader Movie element
      */
-    protected Movie readMovie() throws NoSuchElementException {
+    protected Movie readMovie() {
         if (!readingFromFile) {
             ClientController.println("*reading Movie object starts*");
         }
@@ -167,6 +167,10 @@ public abstract class ElementCommand extends NameableCommand {
         } catch (NumberFormatException e) {
             throw new BadArgumentsFormatException(getCommandName(), "value must be integer");
         }
-        this.readMovie = readMovie();
+        try {
+            this.readMovie = readMovie();
+        } catch (NoSuchElementException e) {
+            throw new BadArgumentsException(getCommandName(), "INVALID INPUT \"EOF\"");
+        }
     }
 }

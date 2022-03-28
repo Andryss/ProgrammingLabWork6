@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.PrintStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -9,9 +10,8 @@ import java.util.Scanner;
  */
 public class ClientController {
 
-    private static final Scanner reader = new Scanner(System.in);
+    private static Scanner reader = new Scanner(System.in);
     private static final PrintStream writer = System.out;
-    private static final PrintStream errWriter = System.err;
 
     private ClientController() {}
 
@@ -22,8 +22,17 @@ public class ClientController {
         println("I'm waiting for your commands (type \"help\" for list of available commands)." + "\u001B[0m");
     }
 
+    private static void reinitialize() {
+        reader = new Scanner(System.in);
+    }
+
     public static String readLine() {
-        return reader.nextLine();
+        try {
+            return reader.nextLine();
+        } catch (NoSuchElementException e) {
+            reinitialize();
+            throw e;
+        }
     }
 
     public static void println(String line) {
@@ -35,7 +44,7 @@ public class ClientController {
     }
 
     public static void printlnErr(String line) {
-        errWriter.println(line);
+        writer.println("\u001B[31m" + line + "\u001B[0m");
     }
 
     public static Scanner getReader() {
